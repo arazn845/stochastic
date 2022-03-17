@@ -49,3 +49,10 @@ round.( JuMP.value.(ζj), digits= 2)
 
 
 JuMP.value.(γ)
+
+using CSV
+using DataFrames
+df = DataFrame( round.( JuMP.value.(χ), digits=2 ), :auto )
+df = DataFrame( JuMP.value.(α[:, :,1]), :auto )
+df = DataFrame( JuMP.value.(α[:, :,2]), :auto )
+df = DataFrame( JuMP.value.(α[:, :,3]), :auto )
