@@ -16,7 +16,6 @@ D = [0.5  0.6   0.5; 2.0   2.0   1.2; 0.4   0.8    2.2]; #d_jt
 D = [0.8  0.9   0.8; 2.5   2.5   1.8; 0.6   1.2    3.2]; #d_jt
 
 #below average
-
 D = [0.2  0.3   0.2; 1.5   1.5   0.8; 0.2   0.4    1.2]; #d_jt
 
 @variable(m, 0 ≤ χ[1:H,1:J] ≤ 1 )
@@ -51,13 +50,18 @@ objective_value(m)
 @expression(m,  ζ_Casual_Total, sum( γ[j,t] for j=1:T for t=1:T )  )
 @expression(m,  ζ_Casual_j[j=1:J], sum( γ[j,t] for t=1:T )  )
 
-value(ζ_Permanent_Total)
-value(ζ_Permanent_percentage)
-round.( JuMP.value.(ζ_Permanent_h), digits= 2)
-round.( JuMP.value.(ζ_Permanent_j), digits= 2)
+df = DataFrame( objective_value = objective_value(m) )
+df = DataFrame( ζ_Permanent_Total = value(ζ_Permanent_Total) )
+df = DataFrame( ζ_Permanent_percentage = value(ζ_Permanent_percentage) )
+df = DataFrame( ζ_Permanent_h = round.( JuMP.value.(ζ_Permanent_h), digits= 2) )
+df = DataFrame( ζ_Permanent_j = round.( JuMP.value.(ζ_Permanent_j), digits= 2) )
 ##########################
-value(ζ_Casual_Total)
-round.( JuMP.value.(ζ_Casual_j), digits= 2)
+df = DataFrame( ζ_Casual_Total = value(ζ_Casual_Total) )
+df = DataFrame( ζ_Casual_j = round.( JuMP.value.(ζ_Casual_j), digits= 2) )
+
+
+    
+            
 
 using CSV
 using DataFrames
@@ -65,3 +69,5 @@ df = DataFrame( round.( JuMP.value.(χ), digits=2 ), :auto )
 df = DataFrame( JuMP.value.(α[:, :,1]), :auto )
 df = DataFrame( JuMP.value.(α[:, :,2]), :auto )
 df = DataFrame( JuMP.value.(α[:, :,3]), :auto )
+
+
