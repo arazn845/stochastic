@@ -41,18 +41,23 @@ D = [0.2  0.3   0.2; 1.5   1.5   0.8; 0.2   0.4    1.2]; #d_jt
 optimize!(m)
 objective_value(m)
 
-@expression(m,  ζT, sum( χ[h,j] for j=1:J for h=1:H ) )
-@expression(m,  ζP, sum( χ[h,j] for j=1:J for h=1:H ) / (H * J) )
-@expression(m,  ζh[h=1:H], sum( χ[h,j] for j=1:J )  )
-@expression(m,  ζj[j=1:J], sum( χ[h,j] for h=1:H )  )
-
-value(ζT)
-value(ζP)
-round.( JuMP.value.(ζh), digits= 2)
-round.( JuMP.value.(ζj), digits= 2)
+@expression(m,  ζ_Permanent_Total, sum( χ[h,j] for j=1:J for h=1:H ) )
+@expression(m,  ζ_Permanent_percentage, sum( χ[h,j] for j=1:J for h=1:H ) / (H * J) )
+@expression(m,  ζ_Permanent_h[h=1:H], sum( χ[h,j] for j=1:J )  )
+@expression(m,  ζ_Permanent_j[j=1:J], sum( χ[h,j] for h=1:H )  )
 
 
-JuMP.value.(γ)
+
+@expression(m,  ζ_Casual_Total, sum( γ[j,t] for j=1:T for t=1:T )  )
+@expression(m,  ζ_Casual_j[j=1:J], sum( γ[j,t] for t=1:T )  )
+
+value(ζ_Permanent_Total)
+value(ζ_Permanent_percentage)
+round.( JuMP.value.(ζ_Permanent_h), digits= 2)
+round.( JuMP.value.(ζ_Permanent_j), digits= 2)
+##########################
+value(ζ_Casual_Total)
+round.( JuMP.value.(ζ_Casual_j), digits= 2)
 
 using CSV
 using DataFrames
